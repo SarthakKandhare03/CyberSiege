@@ -1,0 +1,95 @@
+// ============================================================
+// CYBERPUNK SMART CITY — Defense Actions Data
+// All available defensive actions with their effects
+// ============================================================
+import type { DefenseAction } from '../types/city';
+
+export const DEFENSE_ACTIONS: Record<string, DefenseAction> = {
+  patch: {
+    type: 'patch',
+    label: 'Apply Security Patch',
+    description: 'Install the latest security updates to close known vulnerabilities.',
+    simpleExplanation: 'Like fixing a broken lock on a door — updates plug holes that attackers know about.',
+    applicableStatuses: ['warning', 'compromised', 'recovering'],
+    healthRestored: 20,
+    trustGain: 5,
+    scoreGain: 15,
+    downtimeAvoided: 10,
+  },
+  mfa: {
+    type: 'mfa',
+    label: 'Enable Multi-Factor Authentication',
+    description: 'Require a second verification step before allowing system access.',
+    simpleExplanation: 'Even if attackers steal a password, they cannot log in without the second factor (like a phone code).',
+    applicableStatuses: ['warning', 'compromised', 'secure'],
+    healthRestored: 15,
+    trustGain: 10,
+    scoreGain: 20,
+    downtimeAvoided: 15,
+  },
+  segment: {
+    type: 'segment',
+    label: 'Segment Network',
+    description: 'Isolate this system onto its own network zone to contain any spread.',
+    simpleExplanation: 'Like closing blast doors — if an attacker gets into one room, they cannot reach the others.',
+    applicableStatuses: ['warning', 'compromised'],
+    healthRestored: 10,
+    trustGain: 8,
+    scoreGain: 18,
+    downtimeAvoided: 20,
+  },
+  isolate: {
+    type: 'isolate',
+    label: 'Isolate Asset',
+    description: 'Take the asset offline immediately to prevent further damage or spread.',
+    simpleExplanation: 'Emergency shutdown — stops the problem from spreading, but the service goes offline temporarily.',
+    applicableStatuses: ['compromised'],
+    healthRestored: 0,
+    trustGain: -5,
+    scoreGain: 5,
+    downtimeAvoided: 30,
+  },
+  restore_backup: {
+    type: 'restore_backup',
+    label: 'Restore Backup',
+    description: 'Recover system data and configuration from the most recent clean backup.',
+    simpleExplanation: 'Like a time machine — restores everything to before the attack happened.',
+    applicableStatuses: ['compromised', 'offline', 'recovering'],
+    healthRestored: 60,
+    trustGain: 15,
+    scoreGain: 25,
+    downtimeAvoided: 25,
+  },
+  activate_monitoring: {
+    type: 'activate_monitoring',
+    label: 'Activate Monitoring',
+    description: 'Enable enhanced real-time threat detection and logging for this asset.',
+    simpleExplanation: 'Deploy security cameras — constant watching means threats are spotted early.',
+    applicableStatuses: ['secure', 'warning', 'recovering'],
+    healthRestored: 5,
+    trustGain: 5,
+    scoreGain: 10,
+    downtimeAvoided: 5,
+  },
+  notify_citizens: {
+    type: 'notify_citizens',
+    label: 'Notify Citizens',
+    description: 'Issue a transparent public communication about the current situation and guidance.',
+    simpleExplanation: 'Keeping people informed builds trust and prevents panic during incidents.',
+    applicableStatuses: ['warning', 'compromised', 'offline', 'recovering'],
+    healthRestored: 0,
+    trustGain: 20,
+    scoreGain: 12,
+    downtimeAvoided: 0,
+  },
+};
+
+export const DEFENSE_LEARNING: Record<string, string> = {
+  patch: 'Security patches fix known weaknesses in software. Attackers actively search for unpatched systems, making timely updates one of the most important defences.',
+  mfa: 'Multi-Factor Authentication (MFA) requires a user to prove their identity in two different ways — usually something they know (password) plus something they have (phone). Even if a password is stolen, MFA stops the attacker.',
+  segment: 'Network segmentation divides a network into isolated zones. If an attacker breaks into one zone, they cannot move freely to other zones — limiting the blast radius of an attack.',
+  isolate: 'Asset isolation immediately cuts a compromised system off from the network. This "quarantine" approach stops the spread but temporarily takes the service offline.',
+  restore_backup: 'Backups are copies of your data stored separately from the main system. If an attack corrupts or encrypts your data, a clean backup lets you restore operations without paying ransoms or losing data permanently.',
+  activate_monitoring: 'Security monitoring watches system behaviour in real time. Unusual patterns — like logins at 3am or massive file transfers — trigger alerts, giving defenders time to respond before damage occurs.',
+  notify_citizens: 'Transparent communication during incidents builds public trust. When people know what happened and what steps are being taken, panic is reduced and cooperation is increased.',
+};
