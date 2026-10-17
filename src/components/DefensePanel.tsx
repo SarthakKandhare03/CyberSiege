@@ -3,6 +3,7 @@
 // ============================================================
 import { useAppState } from '../context/AppContext';
 import { DEFENSE_ACTIONS } from '../data/defenses';
+import { SCENARIOS } from '../data/scenarios';
 import type { DefenseActionType } from '../types/city';
 
 const DEFENSE_ICONS: Record<DefenseActionType, string> = {
@@ -17,8 +18,18 @@ const DEFENSE_ICONS: Record<DefenseActionType, string> = {
 
 export function DefensePanel() {
   const { state, dispatch } = useAppState();
-  const { selectedAssetId, assets } = state;
+  const { selectedAssetId, assets, simulation } = state;
   const selectedAsset = selectedAssetId ? assets[selectedAssetId] : null;
+
+  // Playbook guidance: defenses the latest incident event recommends for this asset
+  const lastEvent = simulation.activeScenarioId
+    ? SCENARIOS[simulation.activeScenarioId].events[simulation.currentEventIndex - 1]
+    : undefined;
+  const recommended = new Set<DefenseActionType>(
+    lastEvent && selectedAssetId && lastEvent.affectedAssetIds.includes(selectedAssetId)
+      ? lastEvent.recommendedDefenses
+      : [],
+  );
 
   const handleDefense = (defenseType: DefenseActionType) => {
     if (!selectedAssetId) return;
@@ -29,7 +40,7 @@ export function DefensePanel() {
   };
 
   return (
-    <div className="panel defense-panel" role="region" aria-label="Defense Command Center">
+    <section className="panel defense-panel" aria-label="Defense Command Center">
       <div className="panel-header">
         <span className="panel-title">Defense Command</span>
       </div>
@@ -37,26 +48,18 @@ export function DefensePanel() {
       <div className="panel-body">
         {/* Simulation notice */}
         <div className="defense-notice" role="note" aria-label="Simulation notice">
-          ⚠️ SIMULATION ONLY — All actions below are fictional defensive measures in the city simulation
+          Simulation only — all actions below are fictional defensive measures in the city simulation
         </div>
 
         {!selectedAsset ? (
           <div className="no-asset-selected">
-            <div aria-hidden="true" style={{ fontSize: '2rem', marginBottom: '8px' }}>🎯</div>
+            <div className="no-asset-selected__icon" aria-hidden="true">🎯</div>
             Select a building on the city map<br />to apply defensive actions
           </div>
         ) : (
           <>
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
-                color: 'var(--text-muted)',
-                marginBottom: 'var(--space-sm)',
-                letterSpacing: '0.08em',
-              }}
-            >
-              Target: <span style={{ color: 'var(--neon-cyan)' }}>{selectedAsset.name}</span>
+            <div className="defense-target">
+              Target <span>{selectedAsset.name}</span>
             </div>
 
             {Object.values(DEFENSE_ACTIONS).map((action) => {
@@ -71,7 +74,7 @@ export function DefensePanel() {
               return (
                 <button
                   key={action.type}
-                  className="defense-action-btn"
+                  className={`defense-action-btn${recommended.has(action.type) && isApplicable ? ' is-recommended' : ''}`}
                   onClick={() => handleDefense(action.type)}
                   disabled={!isApplicable}
                   title={disabledReason}
@@ -79,13 +82,13 @@ export function DefensePanel() {
                   aria-pressed={alreadyApplied}
                 >
                   <div className="defense-action-btn__label">
-                    <span aria-hidden="true">{DEFENSE_ICONS[action.type]}</span>
+                    <span className="defense-action-btn__icon" aria-hidden="true">{DEFENSE_ICONS[action.type]}</span>
                     {action.label}
+                    {recommended.has(action.type) && isApplicable && !alreadyApplied && (
+                      <span className="chip chip--recommended">Recommended</span>
+                    )}
                     {alreadyApplied && (
-                      <span
-                        style={{ color: 'var(--status-secure)', fontSize: '0.6rem' }}
-                        aria-label="Already applied"
-                      >
+                      <span className="chip chip--applied" aria-label="Already applied">
                         ✓ Applied
                       </span>
                     )}
@@ -100,7 +103,7 @@ export function DefensePanel() {
                     {action.trustGain > 0 ? (
                       <span className="effect-tag trust">+{action.trustGain} Trust</span>
                     ) : action.trustGain < 0 ? (
-                      <span className="effect-tag" style={{ color: 'var(--neon-red)', borderColor: 'rgba(255,23,68,0.2)', background: 'rgba(255,23,68,0.06)' }}>
+                      <span className="effect-tag negative">
                         {action.trustGain} Trust
                       </span>
                     ) : null}
@@ -112,6 +115,6 @@ export function DefensePanel() {
           </>
         )}
       </div>
-    </div>
+    </section>
   );
 }

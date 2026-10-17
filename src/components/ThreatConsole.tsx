@@ -24,12 +24,20 @@ function formatTimestamp(iso: string): string {
 export function ThreatConsole() {
   const { state, dispatch } = useAppState();
   const { threatLog, logFilter } = state;
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const pinnedRef = useRef(true);
 
-  // Auto-scroll to bottom when new logs arrive
+  // Follow new entries only while the reader is at the bottom; scroll the
+  // log container itself so the page never jumps
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = bodyRef.current;
+    if (el && pinnedRef.current) el.scrollTop = el.scrollHeight;
   }, [threatLog.length]);
+
+  const handleScroll = () => {
+    const el = bodyRef.current;
+    if (el) pinnedRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 32;
+  };
 
   const filteredLog = threatLog.filter((entry) => {
     if (logFilter.severity !== 'all' && entry.severity !== logFilter.severity) return false;
@@ -38,20 +46,13 @@ export function ThreatConsole() {
   });
 
   return (
-    <div className="panel threat-console" role="region" aria-label="Threat Intelligence Console" aria-live="polite">
+    <section id="threats" className="panel threat-console" aria-label="Threat Intelligence Console">
       <div className="panel-header">
         <span className="panel-title">
           Threat Console
+          <span className="live-tag" aria-hidden="true">Live</span>
         </span>
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.6rem',
-            color: 'var(--text-muted)',
-          }}
-        >
-          {filteredLog.length} entries
-        </span>
+        <span className="panel-meta">{filteredLog.length} entries</span>
       </div>
 
       {/* Filters */}
@@ -99,19 +100,9 @@ export function ThreatConsole() {
       </div>
 
       {/* Log entries */}
-      <div className="panel-body" role="log" aria-label="Event log">
+      <div className="panel-body" role="log" aria-label="Event log" aria-live="polite" ref={bodyRef} onScroll={handleScroll}>
         {filteredLog.length === 0 ? (
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.65rem',
-              color: 'var(--text-dim)',
-              textAlign: 'center',
-              paddingTop: 'var(--space-lg)',
-            }}
-          >
-            No events matching filter...
-          </div>
+          <div className="empty-note">No events matching filter...</div>
         ) : (
           filteredLog.map((entry) => (
             <div key={entry.id} className="log-entry">
@@ -130,8 +121,7 @@ export function ThreatConsole() {
             </div>
           ))
         )}
-        <div ref={bottomRef} aria-hidden="true" />
       </div>
-    </div>
+    </section>
   );
 }

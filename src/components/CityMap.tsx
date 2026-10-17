@@ -1,32 +1,34 @@
 // ============================================================
 // CityMap — Interactive city map with all 12 clickable assets
+// Live dependency links animate when an attack is spreading.
 // ============================================================
-import type { CityAsset } from '../types/city';
+import { useMemo } from 'react';
+import type { AssetStatus, CityAsset, District } from '../types/city';
 import { DISTRICT_COLORS } from '../data/assets';
 import { useAppState } from '../context/AppContext';
+import { calculateCityHealth } from '../engine/scoring';
 
-const DISTRICT_ZONES = [
-  { id: 'transit', label: 'Transit District', className: 'transit' },
-  { id: 'health', label: 'Health District', className: 'health' },
-  { id: 'energy', label: 'Energy District', className: 'energy' },
-  { id: 'civic', label: 'Civic District', className: 'civic' },
+const DISTRICT_ZONES: { id: District; label: string }[] = [
+  { id: 'transit', label: 'Transit' },
+  { id: 'health', label: 'Health' },
+  { id: 'energy', label: 'Energy' },
+  { id: 'civic', label: 'Civic' },
 ];
+
+const STATUS_LEGEND: { status: AssetStatus; label: string }[] = [
+  { status: 'secure', label: 'Secure' },
+  { status: 'warning', label: 'Warning' },
+  { status: 'compromised', label: 'Compromised' },
+  { status: 'recovering', label: 'Recovering' },
+  { status: 'offline', label: 'Offline' },
+];
+
+const STATUS_RANK: Record<AssetStatus, number> = { secure: 0, recovering: 1, offline: 2, warning: 3, compromised: 4 };
 
 function getHealthFillClass(health: number): string {
   if (health > 60) return 'high';
   if (health > 30) return 'medium';
   return 'low';
-}
-
-function getHealthColor(health: number, status: string): string {
-  if (status === 'secure') return 'var(--status-secure)';
-  if (status === 'warning') return 'var(--status-warning)';
-  if (status === 'compromised') return 'var(--status-compromised)';
-  if (status === 'offline') return 'var(--status-offline)';
-  if (status === 'recovering') return 'var(--status-recovering)';
-  if (health > 60) return 'var(--status-secure)';
-  if (health > 30) return 'var(--status-warning)';
-  return 'var(--status-compromised)';
 }
 
 interface BuildingNodeProps {
@@ -36,58 +38,26 @@ interface BuildingNodeProps {
 }
 
 function BuildingNode({ asset, isSelected, onClick }: BuildingNodeProps) {
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onClick(asset.id);
-    }
-  };
-
-  const districtColor = DISTRICT_COLORS[asset.district] || 'var(--neon-cyan)';
-
   return (
-    <div
+    <button
       className={`building-node ${asset.status}${isSelected ? ' selected' : ''}`}
-      style={{ left: `${asset.position.x}%`, top: `${asset.position.y}%` }}
+      style={{ left: `${asset.position.x}%`, top: `${asset.position.y}%`, '--district': DISTRICT_COLORS[asset.district] } as React.CSSProperties}
       onClick={() => onClick(asset.id)}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
       aria-label={`${asset.name} — Status: ${asset.status}, Health: ${asset.health}%`}
       aria-pressed={isSelected}
-      title={`${asset.name} (${asset.status})`}
+      title={`${asset.name} (${asset.status}, ${asset.health}%)`}
     >
-      {/* Alert ring for compromised buildings */}
-      {asset.status === 'compromised' && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: '-6px',
-            borderRadius: '6px',
-            border: '2px solid var(--status-compromised)',
-            opacity: 0.4,
-            animation: 'alertPulse 0.8s ease-in-out infinite',
-          }}
-          aria-hidden="true"
-        />
-      )}
-
-      <div className="building-icon" style={{ borderColor: `${districtColor}44` }}>
+      {asset.status === 'compromised' && <span className="building-node__ring" aria-hidden="true" />}
+      <span className="building-icon">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d={asset.svgIcon} />
         </svg>
-      </div>
-      <div className="building-name">{asset.name.split(' ').slice(0, 2).join(' ')}</div>
-      <div className="building-health-bar" aria-hidden="true">
-        <div
-          className={`building-health-fill ${getHealthFillClass(asset.health)}`}
-          style={{
-            width: `${asset.health}%`,
-            background: getHealthColor(asset.health, asset.status),
-          }}
-        />
-      </div>
-    </div>
+      </span>
+      <span className="building-name">{asset.name.split(' ').slice(0, 2).join(' ')}</span>
+      <span className="building-health-bar" aria-hidden="true">
+        <span className={`building-health-fill ${getHealthFillClass(asset.health)}`} style={{ width: `${asset.health}%` }} />
+      </span>
+    </button>
   );
 }
 
@@ -99,54 +69,85 @@ export function CityMap() {
     dispatch({ type: 'SELECT_ASSET', payload: id === state.selectedAssetId ? null : id });
   };
 
+  // Each dependency edge takes the worse status of its two endpoints
+  const links = useMemo(
+    () =>
+      Object.values(state.assets).flatMap((asset) =>
+        asset.dependencies
+          .map((depId) => state.assets[depId])
+          .filter(Boolean)
+          .map((dep) => {
+            const worst = STATUS_RANK[asset.status] >= STATUS_RANK[dep.status] ? asset.status : dep.status;
+            return { id: `${dep.id}->${asset.id}`, from: dep.position, to: asset.position, status: worst };
+          }),
+      ),
+    [state.assets],
+  );
+
+  const districtHealth = useMemo(() => {
+    const all = Object.values(state.assets);
+    const out = {} as Record<District, number>;
+    for (const zone of DISTRICT_ZONES) {
+      out[zone.id] = calculateCityHealth(all.filter((a) => a.district === zone.id).map((a) => a.health));
+    }
+    return out;
+  }, [state.assets]);
+
+  const hostile = links.filter((l) => l.status === 'compromised').length;
+
   return (
-    <div className="panel city-map-panel" role="region" aria-label="Interactive City Map">
+    <section className="panel city-map-panel" aria-label="Interactive City Map">
       <div className="panel-header">
-        <span className="panel-title">
-          City Infrastructure Map
-        </span>
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.65rem',
-            color: 'var(--text-muted)',
-          }}
-        >
-          {assets.length} assets · click to inspect
+        <span className="panel-title">City Infrastructure Map</span>
+        <span className="panel-meta">
+          {hostile > 0 ? <span className="text-hostile">{hostile} hostile link{hostile > 1 ? 's' : ''}</span> : `${assets.length} assets`}
+          {' · '}click to inspect
         </span>
       </div>
 
       <div className="city-map">
         <div className="city-map__inner">
           <div className="city-map__grid" aria-hidden="true" />
+          <div className="city-map__sweep" aria-hidden="true" />
 
-          {/* District zone backgrounds */}
           {DISTRICT_ZONES.map((zone) => (
-            <div
-              key={zone.id}
-              className={`district-zone ${zone.className}`}
-              aria-hidden="true"
-            >
-              <span
-                className="district-label"
-                style={{ color: DISTRICT_COLORS[zone.id] }}
-              >
+            <div key={zone.id} className={`district-zone ${zone.id}`} aria-hidden="true">
+              <span className="district-label" style={{ color: DISTRICT_COLORS[zone.id] }}>
                 {zone.label}
+                <span className="district-label__health">{districtHealth[zone.id]}%</span>
               </span>
             </div>
           ))}
 
-          {/* Building nodes */}
+          <svg className="city-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            {links.map((l) => (
+              <line
+                key={l.id}
+                className={`city-link city-link--${l.status}`}
+                x1={l.from.x}
+                y1={l.from.y}
+                x2={l.to.x}
+                y2={l.to.y}
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+          </svg>
+
           {assets.map((asset) => (
-            <BuildingNode
-              key={asset.id}
-              asset={asset}
-              isSelected={state.selectedAssetId === asset.id}
-              onClick={handleSelect}
-            />
+            <BuildingNode key={asset.id} asset={asset} isSelected={state.selectedAssetId === asset.id} onClick={handleSelect} />
           ))}
         </div>
       </div>
-    </div>
+
+      <ul className="map-legend" aria-label="Status legend">
+        {STATUS_LEGEND.map((s) => (
+          <li key={s.status} className={`map-legend__item status-${s.status}`}>
+            <span className="map-legend__dot" aria-hidden="true" />
+            {s.label}
+            <span className="map-legend__count">{assets.filter((a) => a.status === s.status).length}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

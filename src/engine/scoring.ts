@@ -2,7 +2,7 @@
 // CYBERPUNK SMART CITY — Scoring Engine
 // Score calculation, grading, and feedback
 // ============================================================
-import type { MissionScore } from '../types/city';
+import type { CityAsset, MissionScore } from '../types/city';
 
 // ============================================================
 // Calculate final composite score
@@ -62,7 +62,7 @@ export function generateFeedback(
     B: `Good job, Commander. You recovered ${assetsRecovered} systems and showed solid incident response skills. There is room to improve response speed and apply defences more proactively before incidents escalate. Keep practising — the city is counting on you.`,
     C: `Adequate response, Commander. You managed to recover ${assetsRecovered} systems, but ${assetsLost} systems were lost. Consider applying defences earlier in the incident timeline and using network segmentation to contain threats before they spread.`,
     D: `The city suffered significant disruption. ${assetsLost} systems remained offline or compromised at mission end. Focus on applying patches and MFA proactively, and use isolation to contain threats before they cascade to dependent systems.`,
-    F: `Critical failure, Commander. The city\'s infrastructure was severely impacted. Review the learning materials, especially the sections on backups, MFA, and network segmentation. Remember: defenders must act fast and systematically. Try again — every attempt builds your skills.`,
+    F: `Critical failure, Commander. The city's infrastructure was severely impacted. Review the learning materials, especially the sections on backups, MFA, and network segmentation. Remember: defenders must act fast and systematically. Try again — every attempt builds your skills.`,
   };
   return feedbackMap[grade] ?? feedbackMap.C;
 }
@@ -85,4 +85,41 @@ export function getCityStatusLabel(health: number): string {
   if (health >= 50) return 'SIGNIFICANT INCIDENTS';
   if (health >= 30) return 'CRITICAL SITUATION';
   return 'CITY UNDER ATTACK';
+}
+
+// ============================================================
+// Summarize live city posture (drives hero, nav and dashboard)
+// ============================================================
+export interface CitySummary {
+  health: number;
+  total: number;
+  secure: number;
+  atRisk: number; // warning + recovering
+  compromised: number;
+  offline: number;
+  threatLevel: number; // 0 (calm) – 1 (city under attack)
+}
+
+export function summarizeCity(assets: CityAsset[]): CitySummary {
+  const count = (status: CityAsset['status']) => assets.filter((a) => a.status === status).length;
+  const health = calculateCityHealth(assets.map((a) => a.health));
+  const compromised = count('compromised');
+  const offline = count('offline');
+  const atRisk = count('warning') + count('recovering');
+
+  // Weighted blend of lost health and hostile asset share, clamped to 0–1
+  const hostileShare = assets.length
+    ? (compromised + offline * 0.6 + atRisk * 0.3) / assets.length
+    : 0;
+  const threatLevel = Math.min(1, Math.max(0, (100 - health) / 100 * 0.6 + hostileShare * 1.4));
+
+  return {
+    health,
+    total: assets.length,
+    secure: count('secure'),
+    atRisk,
+    compromised,
+    offline,
+    threatLevel: Math.round(threatLevel * 100) / 100,
+  };
 }

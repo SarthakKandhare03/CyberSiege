@@ -1,6 +1,7 @@
 // ============================================================
 // LearningDrawer — Beginner cybersecurity education panel
 // ============================================================
+import { useEffect, useRef } from 'react';
 import { useAppState } from '../context/AppContext';
 
 const LEARNING_SECTIONS = [
@@ -50,8 +51,27 @@ const LEARNING_SECTIONS = [
 
 export function LearningDrawer() {
   const { state, dispatch } = useAppState();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const open = state.learningDrawerOpen;
 
-  if (!state.learningDrawerOpen) return null;
+  // Escape closes; focus moves into the drawer and returns afterwards
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') dispatch({ type: 'TOGGLE_LEARNING_DRAWER' });
+    };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+      previous?.focus();
+    };
+  }, [open, dispatch]);
+
+  if (!open) return null;
 
   return (
     <>
@@ -70,17 +90,10 @@ export function LearningDrawer() {
         aria-label="Cybersecurity Learning Guide"
       >
         <div className="learning-drawer__header">
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '0.85rem',
-              color: 'var(--neon-cyan)',
-            }}
-          >
-            💡 Learn Why It Matters
-          </h2>
+          <h2 className="learning-drawer__title">Learn Why It Matters</h2>
           <button
-            className="btn btn-ghost"
+            ref={closeRef}
+            className="icon-btn"
             onClick={() => dispatch({ type: 'TOGGLE_LEARNING_DRAWER' })}
             aria-label="Close learning guide"
             id="close-learning-drawer"
@@ -90,14 +103,7 @@ export function LearningDrawer() {
         </div>
 
         <div className="learning-drawer__body">
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.7rem',
-              color: 'var(--text-muted)',
-              lineHeight: '1.6',
-            }}
-          >
+          <p className="panel-intro">
             Beginner-friendly explanations of the cybersecurity concepts used in this simulation.
           </p>
 

@@ -36,33 +36,23 @@ export function HardwareStatus() {
   }, [state.assets, state.hardwareMode]);
 
   return (
-    <div className="hardware-status" role="region" aria-label="Mock Hardware LED Status">
+    <section id="hardware" className="hardware-status" aria-label="Mock Hardware LED Status">
       <div className="hardware-status__title">
-        <span>🔌 Mock Hardware LEDs</span>
+        <span>Mock Hardware LEDs</span>
         <button
-          className="btn btn-ghost"
-          style={{ fontSize: '0.6rem', padding: '2px 6px' }}
+          className={`switch${state.hardwareMode ? ' is-on' : ''}`}
+          role="switch"
+          aria-checked={state.hardwareMode}
           onClick={() => dispatch({ type: 'SET_HARDWARE_MODE', payload: !state.hardwareMode })}
-          aria-pressed={state.hardwareMode}
-          aria-label={`${state.hardwareMode ? 'Disable' : 'Enable'} hardware mode`}
+          aria-label="Hardware mode"
         >
-          {state.hardwareMode ? '● ON' : '○ OFF'}
+          <span className="switch__thumb" aria-hidden="true" />
         </button>
       </div>
 
       {state.hardwareMode ? (
         <>
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.55rem',
-              color: 'var(--neon-amber)',
-              marginBottom: '6px',
-              letterSpacing: '0.05em',
-            }}
-          >
-            [SIMULATION] ESP32 mock — no real device connected
-          </div>
+          <div className="hardware-status__note">[SIMULATION] ESP32 mock — no real device connected</div>
           <div className="hardware-led-grid" aria-label="LED status indicators for all city assets">
             {Object.values(state.assets).map((asset) => {
               const color = STATUS_LED_COLORS[asset.status];
@@ -89,32 +79,14 @@ export function HardwareStatus() {
             })}
           </div>
 
-          <div
-            style={{
-              marginTop: '8px',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.55rem',
-              color: 'var(--text-dim)',
-              lineHeight: '1.5',
-            }}
-          >
+          <div className="hardware-status__footnote">
             Future: Connect an ESP32 to physical building models with LEDs.
             See README for hardware setup guide.
           </div>
         </>
       ) : (
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.6rem',
-            color: 'var(--text-dim)',
-            textAlign: 'center',
-            padding: 'var(--space-sm)',
-          }}
-        >
-          Enable to see simulated LED status
-        </div>
+        <div className="empty-note">Enable to see simulated LED status</div>
       )}
-    </div>
+    </section>
   );
 }

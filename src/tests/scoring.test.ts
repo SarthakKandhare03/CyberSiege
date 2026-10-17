@@ -2,7 +2,8 @@
 // UNIT TESTS — Scoring Engine
 // ============================================================
 import { describe, it, expect } from 'vitest';
-import { calculateScore, calculateGrade, generateFeedback, calculateCityHealth, getCityStatusLabel } from '../engine/scoring';
+import { calculateScore, calculateGrade, generateFeedback, calculateCityHealth, getCityStatusLabel, summarizeCity } from '../engine/scoring';
+import { INITIAL_ASSETS } from '../data/assets';
 import type { MissionScore } from '../types/city';
 
 const baseScore: MissionScore = {
@@ -116,5 +117,32 @@ describe('getCityStatusLabel', () => {
 
   it('returns under attack for health < 30', () => {
     expect(getCityStatusLabel(0)).toBe('CITY UNDER ATTACK');
+  });
+});
+
+describe('summarizeCity', () => {
+  const assets = Object.values(INITIAL_ASSETS);
+
+  it('reports a calm, fully secure city at start', () => {
+    const summary = summarizeCity(assets);
+    expect(summary.health).toBe(100);
+    expect(summary.total).toBe(assets.length);
+    expect(summary.secure).toBe(assets.length);
+    expect(summary.threatLevel).toBe(0);
+  });
+
+  it('raises the threat level as assets are compromised', () => {
+    const attacked = assets.map((a, i) =>
+      i < 4 ? { ...a, status: 'compromised' as const, health: 20 } : a,
+    );
+    const summary = summarizeCity(attacked);
+    expect(summary.compromised).toBe(4);
+    expect(summary.secure).toBe(assets.length - 4);
+    expect(summary.threatLevel).toBeGreaterThan(0.4);
+    expect(summary.threatLevel).toBeLessThanOrEqual(1);
+  });
+
+  it('handles an empty asset list', () => {
+    expect(summarizeCity([]).threatLevel).toBe(0);
   });
 });

@@ -7,6 +7,11 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   plugins: [react()],
   base: process.env.VITE_BASE_PATH || '/',
+  build: {
+    // three.js ships in its own lazily-loaded chunk (hero scene), so it never
+    // blocks first paint; raise the limit to keep that expected size quiet
+    chunkSizeWarningLimit: 600,
+  },
   test: {
     globals: true,
     environment: 'node',

@@ -187,7 +187,7 @@ export function loadSavedSettings(): Partial<AppState> {
   }
 }
 
-export function saveSettings(state: AppState): void {
+export function saveSettings(state: Pick<AppState, 'soundEnabled' | 'hardwareMode'>): void {
   try {
     const toSave: Partial<AppState> = {
       soundEnabled: state.soundEnabled,

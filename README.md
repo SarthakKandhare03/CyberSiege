@@ -1,410 +1,361 @@
-# Cyberpunk Smart City Under Attack 🏙️⚡
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!--                    C Y B E R S I E G E                                -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
 
-> An interactive cybersecurity education simulation — defend a fictional smart city as the Cyber Defense Commander
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d0221,40:ff2d78,75:a259ff,100:00e5ff&height=220&section=header&text=CYBERSIEGE&fontSize=78&fontColor=ffffff&fontAlignY=38&desc=D%20E%20F%20E%20N%20D%20%20%20T%20H%20E%20%20%20G%20R%20I%20D&descAlignY=60&descSize=18&animation=twinkling" alt="CyberSiege" width="100%"/>
+</p>
 
-![Status](https://img.shields.io/badge/Status-Active-00ff88?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-a259ff?style=flat-square)
-![Tech](https://img.shields.io/badge/Stack-Vite%20%7C%20React%20%7C%20TypeScript-00e5ff?style=flat-square)
+<p align="center">
+  <a href="https://github.com/sarthakkandhare03/CyberSiege">
+    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=2600&pause=700&color=00E5FF&center=true&vCenter=true&multiline=false&width=760&height=50&lines=%5BSIMULATION%5D+Intrusion+detected+on+METRO_CONTROL...;%5BSIMULATION%5D+Ransomware+spreading+to+CITY_HOSPITAL...;%5BSIMULATION%5D+Smart+grid+exploit+in+progress...;%3E+You+are+the+last+line+of+defense.;%3E+How+long+can+you+hold+the+grid%3F" alt="Typing SVG"/>
+  </a>
+</p>
 
----
+<p align="center">
+  <a href="https://sarthakkandhare03.github.io/CyberSiege/"><img src="https://img.shields.io/badge/▶_PLAY_LIVE-ff2d78?style=for-the-badge&labelColor=0d0221" alt="Play Live"/></a>
+  <a href="#-boot-sequence"><img src="https://img.shields.io/badge/⚡_QUICK_START-00e5ff?style=for-the-badge&labelColor=0d0221" alt="Quick Start"/></a>
+  <a href="#-threat-briefings"><img src="https://img.shields.io/badge/📡_SCENARIOS-ff9a3d?style=for-the-badge&labelColor=0d0221" alt="Scenarios"/></a>
+  <a href="#-esp32-hardware-mode"><img src="https://img.shields.io/badge/🔌_HARDWARE-a259ff?style=for-the-badge&labelColor=0d0221" alt="Hardware"/></a>
+</p>
 
-## ⚠️ Safe-Use Statement
+<p align="center">
+  <img src="https://img.shields.io/github/actions/workflow/status/sarthakkandhare03/CyberSiege/deploy-pages.yml?style=flat-square&label=deploy&logo=githubactions&logoColor=white&labelColor=0d0221" alt="Deploy status"/>
+  <img src="https://img.shields.io/badge/tests-48_passing-34e3a0?style=flat-square&logo=vitest&logoColor=white&labelColor=0d0221" alt="48 tests passing"/>
+  <img src="https://img.shields.io/badge/lint-0_warnings-34e3a0?style=flat-square&logo=oxc&logoColor=white&labelColor=0d0221" alt="0 lint warnings"/>
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=61DAFB&labelColor=0d0221" alt="React 19"/>
+  <img src="https://img.shields.io/badge/TypeScript-6-3178C6?style=flat-square&logo=typescript&logoColor=3178C6&labelColor=0d0221" alt="TypeScript 6"/>
+  <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=646CFF&labelColor=0d0221" alt="Vite 8"/>
+  <img src="https://img.shields.io/badge/three.js-WebGL-ffffff?style=flat-square&logo=threedotjs&logoColor=white&labelColor=0d0221" alt="three.js"/>
+  <img src="https://img.shields.io/badge/license-MIT-ffd600?style=flat-square&labelColor=0d0221" alt="MIT"/>
+</p>
 
-This is a **100% ethical, defensive cybersecurity education project**.
+<p align="center">
+  <img src="docs/banner.jpg" alt="CyberSiege — Defend the Grid" width="100%"/>
+</p>
 
-- ✅ All incidents are **fictional simulations only**
-- ✅ No real hacking tools, exploit code, or network attacks
-- ✅ No external network connections — fully offline capable
-- ✅ No real personal data is collected or processed
-- ✅ All log messages are prefixed with `[SIMULATION]`
-- ✅ Intended for school exhibitions, classrooms, and awareness events
-
-**This project must never be used to target real systems.** See [SECURITY.md](SECURITY.md) for details.
-
----
-
-## 📸 Screenshots
-
-> _Screenshots coming soon — run the project locally to see the full experience._
-
-| City Map | Defense Command | Mission Report |
-|----------|----------------|----------------|
-| _[City map screenshot]_ | _[Defense panel screenshot]_ | _[Mission report screenshot]_ |
-
----
-
-## ✨ Features
-
-- **Interactive City Map** — 12 clickable city assets across 4 districts
-- **3 Playable Scenarios** — Beginner to Advanced fictional incident response
-- **7 Defense Actions** — Patch, MFA, Segment, Isolate, Backup, Monitor, Notify
-- **Terminal Threat Console** — Real-time simulated event log with filters
-- **Live Scoring** — Track services protected, uptime, and citizen trust
-- **Mission Reports** — Letter-grade assessment with feedback
-- **Learning Drawer** — Beginner-friendly explanations of 6 key security concepts
-- **Auto-Play Demo Mode** — Hands-free demonstration for exhibitions
-- **Mock Hardware LEDs** — Simulated ESP32 LED status dashboard
-- **Full Accessibility** — Keyboard navigation, ARIA labels, skip links, reduced-motion support
-- **Responsive Design** — Laptop, tablet, and phone compatible
+```diff
+- ALERT  >> 03:14:07  phishing payload executed on dispatch workstation
+- ALERT  >> 03:14:22  lateral movement: METRO_CONTROL -> TRAFFIC_LIGHTS
+! WARN   >> 03:14:40  public Wi-Fi plaza under active probe
++ DEFENSE>> 03:14:51  MFA enforced. attacker session terminated.
++ DEFENSE>> 03:15:03  network segmented. blast doors sealed.
+@@ STATUS >> 03:15:10  grid stabilising... citizen trust recovering @@
+```
 
 ---
 
-## 🚀 Technology Stack
+## 💀 What Is This?
 
-| Layer | Technology |
-|-------|-----------|
-| Build Tool | Vite 8 |
-| Framework | React 19 |
-| Language | TypeScript 6 |
-| State | `useReducer` + React Context |
-| Persistence | localStorage (settings only) |
-| Testing | Vitest |
-| Styling | Vanilla CSS with CSS variables |
-| Deployment | GitHub Actions → GitHub Pages |
+**CyberSiege** is a real-time cyber-warfare simulation. You are the **Cyber Defense Commander** of a living smart city, and its hospitals, metro, power grid and water supply are under attack *right now*.
 
-**No backend, no database, no API keys required.** Pure static frontend.
+Watch the alerts, read the threat console, and pick the right defense before the attack spreads to the next system. Every second you wait costs uptime, and every wrong move costs **citizen trust**.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🧠 Learn by surviving
+Every defense has a **"Learn Why"** drawer that explains the real concept (MFA, segmentation, offline backups, patching, ICS/SCADA) in plain English.
+
+### 🎮 Play like a game
+Real-time KPIs, sparklines, a live threat console, synthesized sound cues and a WebGL glass hero scene that **turns from calm blue to hostile magenta** as the threat level rises.
+
+</td>
+<td width="50%" valign="top">
+
+### 🛡️ 100% safe & ethical
+Fully fictional. No real systems, no network calls, no exploits. Every log line is tagged `[SIMULATION]`. Built for **schools, expos and cyber clubs**.
+
+### 🪶 Zero backend
+No server, no database, no API keys. Pure static frontend, deployable to GitHub Pages in one push.
+
+</td>
+</tr>
+</table>
+
+> [!IMPORTANT]
+> This is an **educational simulation**. Nothing in it touches, scans or attacks real infrastructure.
 
 ---
 
-## 📦 Installation
+## 📸 Field Recon
+
+<p align="center">
+  <img src="docs/hero.png" alt="CyberSiege landing" width="100%"/>
+  <br/><sub><b>// 01 — THE CALM BEFORE THE STORM</b></sub>
+</p>
+
+<table>
+<tr>
+<td width="50%"><img src="docs/command-center.png" alt="Command center"/><p align="center"><sub><b>// 02 — COMMAND CENTER</b><br/>Live KPIs, health sparklines, threat monitoring</sub></p></td>
+<td width="50%"><img src="docs/gameplay.png" alt="Active gameplay"/><p align="center"><sub><b>// 03 — UNDER SIEGE</b><br/>The grid is compromised. Every second counts.</sub></p></td>
+</tr>
+</table>
+
+---
+
+## ⚡ Boot Sequence
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/cyberpunk-smart-city.git
-cd cyberpunk-smart-city
-
-# Install dependencies
+git clone https://github.com/sarthakkandhare03/CyberSiege.git
+cd CyberSiege
 npm install
+npm run dev          # → http://localhost:5173
 ```
+
+> [!TIP]
+> Requires **Node.js 20.19+** (Node 22 LTS recommended).
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | 🚀 Launch the dev server with hot reload |
+| `npm run build` | 🏗️ Type-check + production build → `dist/` |
+| `npm run preview` | 👀 Serve the production build locally |
+| `npm test` | 🧪 Run the Vitest suite (48 tests) |
+| `npm run test:coverage` | 📊 Coverage report |
+| `npm run lint` | 🧹 Lint with oxlint |
 
 ---
 
-## 🖥️ Running Locally
+## 🗺️ The City
 
-```bash
-npm run dev
-```
-
-Then open [http://localhost:5173](http://localhost:5173) in your browser.
-
----
-
-## 🧪 Running Tests
-
-```bash
-# Run all unit tests once
-npm run test
-
-# Run tests in watch mode (during development)
-npm run test:watch
-
-# Run tests with coverage report
-npm run test:coverage
-```
-
----
-
-## 🏗️ Building for Production
-
-```bash
-npm run build
-```
-
-Output is written to the `dist/` directory. Preview the production build:
-
-```bash
-npm run preview
-```
-
----
-
-## 🗂️ Architecture Overview
+**12 critical systems** across **4 districts**, all live, interconnected and attackable.
 
 ```mermaid
-graph TD
-    A[index.html] --> B[main.tsx]
-    B --> C[AppProvider - Context + useReducer]
-    C --> D[App.tsx - Shell + CommandBar]
-    D --> E[CityMap.tsx]
-    D --> F[ThreatConsole.tsx]
-    D --> G[MissionPanel.tsx]
-    D --> H[AssetDetails.tsx]
-    D --> I[DefensePanel.tsx]
-    D --> J[LearningDrawer.tsx]
-    D --> K[HardwareStatus.tsx]
+flowchart LR
+    classDef transit fill:#0d0221,stroke:#00e5ff,color:#00e5ff
+    classDef health  fill:#0d0221,stroke:#ff2d78,color:#ff2d78
+    classDef energy  fill:#0d0221,stroke:#ffd600,color:#ffd600
+    classDef civic   fill:#0d0221,stroke:#a259ff,color:#a259ff
 
-    subgraph Engine
-        L[simulationEngine.ts - cityReducer]
-        M[scoring.ts - calculateScore/Grade]
+    subgraph E["⚡ ENERGY"]
+      SP[Solar Power Plant]:::energy
+      SG[Smart Grid Control Room]:::energy
+      WT[Water Treatment Plant]:::energy
+    end
+    subgraph T["🚇 TRANSIT"]
+      M[Metro Control Center]:::transit
+      TL[Smart Traffic Lights]:::transit
+      EV[EV Charging Station]:::transit
+    end
+    subgraph H["🏥 HEALTH"]
+      HO[City Hospital]:::health
+      AD[Ambulance Dispatch]:::health
+      PH[Pharmacy Network]:::health
+    end
+    subgraph C["🏛️ CIVIC"]
+      CH[City Hall]:::civic
+      WF[Public Wi-Fi Plaza]:::civic
+      EA[Emergency Alert Tower]:::civic
     end
 
-    subgraph Data
-        N[assets.ts - 12 city assets]
-        O[scenarios.ts - 3 scenarios]
-        P[defenses.ts - 7 defense actions]
-    end
-
-    subgraph Hardware
-        Q[MockHardwareBridge.ts]
-        R[SerialHardwareBridge.ts - PLACEHOLDER]
-    end
-
-    C --> L
-    L --> M
-    L --> N
-    L --> O
-    L --> P
-    K --> Q
+    SP --> SG
+    SG --> WT & EV & HO & EA
+    M --> TL --> AD
+    HO <--> AD
+    HO --> PH
+    CH --> WF & EA
 ```
 
-### Key Architectural Decisions
-
-- **Pure useReducer + Context** — No external state library (Redux, Zustand). All state lives in `AppState` and is mutated only through typed `AppAction` dispatches.
-- **Deterministic scenarios** — All scenario events are static TypeScript data. No random or network-dependent content.
-- **Hardware bridge pattern** — A clean interface (`IHardwareBridge`) allows swapping mock and real implementations without touching UI code.
-- **localStorage for settings only** — Game state is never persisted; only UI preferences (sound, hardware mode) are saved.
+<sub>Arrows show dependencies: when a system goes down, everything downstream feels it. Source: <a href="src/data/assets.ts"><code>src/data/assets.ts</code></a></sub>
 
 ---
 
-## 📖 Scenario Guide
+## 🛡️ Your Arsenal
 
-### Scenario 1 — Rush-Hour Disruption (Beginner)
-**Story:** A fictional phishing message compromises a metro dispatch account. The attacker script probes smart traffic lights and the public Wi-Fi plaza.
-
-**Teaches:** Multi-Factor Authentication (MFA), security monitoring, network isolation, incident response
-
-**Affected Assets:** Metro Control Center, Smart Traffic Lights, Public Wi-Fi Plaza
-
-**Key Defenses:** Enable MFA to block stolen credential use, segment networks to contain spread, restore backup to fix traffic lights
-
----
-
-### Scenario 2 — Hospital Data Freeze (Intermediate)
-**Story:** A fictional ransomware-style simulation freezes hospital records. Pharmacy and ambulance systems are impacted. A clean air-gapped backup is available.
-
-**Teaches:** Offline backups, network segmentation, safe restoration, protecting critical health services
-
-**Affected Assets:** City Hospital, Ambulance Dispatch, Pharmacy Network
-
-**Key Defenses:** Isolate hospital from network, restore from air-gapped backup, apply monitoring after recovery
+<table>
+<tr><th>Defense</th><th>Use it when…</th><th>Real-world lesson</th></tr>
+<tr><td>🩹 <b>Apply Security Patch</b></td><td>A known vulnerability is being exploited</td><td>Most breaches use bugs that already have fixes</td></tr>
+<tr><td>🔐 <b>Enable MFA</b></td><td>Stolen credentials are in play</td><td>A password alone is not identity</td></tr>
+<tr><td>🧱 <b>Segment Network</b></td><td>The attacker is moving sideways</td><td>Blast doors stop one breach becoming ten</td></tr>
+<tr><td>🔌 <b>Isolate Asset</b></td><td>A system is actively compromised</td><td>Contain first, investigate second</td></tr>
+<tr><td>💾 <b>Restore Backup</b></td><td>Data is encrypted or destroyed</td><td>Only offline backups survive ransomware</td></tr>
+<tr><td>👁️ <b>Activate Monitoring</b></td><td>You need eyes on a system</td><td>You can't stop what you can't see</td></tr>
+<tr><td>📢 <b>Notify Citizens</b></td><td>Public services are disrupted</td><td>Transparency protects trust</td></tr>
+</table>
 
 ---
 
-### Scenario 3 — Blackout Protocol (Advanced)
-**Story:** An unpatched vulnerability is exploited in the smart grid dashboard. Attacker scripts probe solar plant sensors and attempt to manipulate water treatment parameters. Emergency alert tower receives unauthorized firmware request.
+## 📡 Threat Briefings
 
-**Teaches:** Timely patching, least-privilege access, ICS/SCADA monitoring, careful infrastructure recovery
+<details>
+<summary><b>🟢 SCENARIO 01 — Rush-Hour Disruption</b> &nbsp;<code>BEGINNER</code></summary>
 
-**Affected Assets:** Smart Grid Control Room, Solar Power Plant, Water Treatment Plant, Emergency Alert Tower
+<br/>
 
-**Key Defenses:** Emergency patch grid dashboard, isolate water treatment, verify backup integrity before restoring
+> A phishing email compromises a metro dispatch account. The attacker starts probing traffic lights and public Wi-Fi.
+
+- **Targets:** Metro Control · Smart Traffic Lights · Public Wi-Fi Plaza
+- **You'll learn:** MFA, isolation, monitoring
+
+</details>
+
+<details>
+<summary><b>🟡 SCENARIO 02 — Hospital Data Freeze</b> &nbsp;<code>INTERMEDIATE</code></summary>
+
+<br/>
+
+> A ransomware-style attack freezes hospital records. Pharmacy and ambulance systems are going dark.
+
+- **Targets:** City Hospital · Ambulance Dispatch · Pharmacy Network
+- **You'll learn:** offline backups, segmentation, safe restoration
+
+</details>
+
+<details>
+<summary><b>🔴 SCENARIO 03 — Blackout Protocol</b> &nbsp;<code>ADVANCED</code></summary>
+
+<br/>
+
+> An unpatched smart-grid vulnerability is exploited. Solar sensors, water treatment and the emergency alert tower are next.
+
+- **Targets:** Smart Grid Control Room · Solar Power Plant · Water Treatment · Emergency Alert Tower
+- **You'll learn:** patch management, ICS/SCADA security, infrastructure recovery
+
+</details>
 
 ---
 
-## 🔌 Future ESP32 / LED Hardware Integration
+## 🏆 Scoring & Ranks
 
-This project includes a documented hardware interface that could be extended to drive physical LED displays on model city buildings.
+You're judged on four fronts: **Mission Score**, **Services Protected**, **Uptime** and **Citizen Trust**. At the end you get a mission report and a rank:
 
-### Concept
+| Rank | Score | Verdict |
+|:---:|:---:|---|
+| 🥇 **A** | 120+ | *Outstanding work, Commander.* |
+| 🥈 **B** | 90 – 119 | Solid response, room to be faster |
+| 🥉 **C** | 60 – 89 | Systems lost, act earlier next time |
+| ⚠️ **D** | 30 – 59 | Significant disruption |
+| 💀 **F** | < 30 | *Critical failure. Try again.* |
 
-1. Build physical city building models (cardboard, 3D-printed, or foam)
-2. Install LEDs inside each building, connected to an **ESP32** or Arduino
-3. Connect the ESP32 via USB serial to the computer running this application
-4. Implement `SerialHardwareBridge.ts` using the **Web Serial API**
+---
 
-### LED Color Scheme (to implement)
+## 🧬 Under the Hood
 
-| Status | LED Color | Hex |
-|--------|-----------|-----|
-| Secure | Green | `#00ff88` |
-| Warning | Amber | `#ffd600` |
-| Compromised | Magenta | `#ff2d78` |
-| Offline | Off | `#000000` |
-| Recovering | Purple | `#a259ff` |
-
-### ESP32 Serial Protocol (proposed)
-
-The application would send JSON lines to the serial port:
-
-```json
-{"assetId": "metro_control", "status": "compromised", "health": 45}
+```mermaid
+flowchart TB
+    UI["🖥️ React 19 UI<br/>CityMap · ThreatConsole · DefensePanel"] -- dispatch(action) --> CTX["🧠 AppContext<br/>useReducer"]
+    CTX --> ENG["⚙️ simulationEngine<br/>pure reducer"]
+    ENG --> SCO["🏆 scoring<br/>grade + feedback"]
+    ENG -- new state --> UI
+    ENG -. asset status .-> HW["🔌 HardwareBridge<br/>Mock / Serial (ESP32)"]
+    UI --> FX["🔊 useSoundFx<br/>Web Audio cues"]
+    UI --> GL["✨ glassScene<br/>three.js, lazy-loaded"]
 ```
 
-The ESP32 maps `assetId` to a specific LED pin and sets the color accordingly.
-
-### Safety Rules for Hardware
-
-- **Never** automatically scan for or connect to serial ports
-- **Always** require explicit user action to initiate connection
-- **Only** send: `assetId`, `status`, `health` — nothing executable
-- **Never** receive commands from the hardware device back to the app
-- Use safe, low-voltage components suitable for school exhibitions
-
-See `src/hardware/SerialHardwareBridge.ts` for the placeholder implementation with full documentation.
-
----
-
-## 🚀 GitHub Pages Deployment
-
-### Step 1 — Create a GitHub Repository
-
-1. Go to [github.com/new](https://github.com/new)
-2. Name your repository (e.g., `cyberpunk-smart-city`)
-3. Set it to **Public** (required for free GitHub Pages)
-4. Do **not** initialize with README (you already have one)
-
-### Step 2 — Push Your Code
-
-```bash
-# From your project directory:
-git remote add origin https://github.com/YOUR_USERNAME/cyberpunk-smart-city.git
-git branch -M main
-git push -u origin main
-```
-
-### Step 3 — Set the Base Path
-
-In your GitHub repository, go to **Settings → Variables → Actions** and add:
-
-| Name | Value |
-|------|-------|
-| `VITE_BASE_PATH` | `/cyberpunk-smart-city/` |
-
-Replace `cyberpunk-smart-city` with your actual repository name.
-
-### Step 4 — Enable GitHub Pages
-
-1. Go to **Settings → Pages**
-2. Under **Source**, select **GitHub Actions**
-3. Save
-
-### Step 5 — Trigger Deployment
-
-The workflow runs automatically on every push to `main`. You can also trigger it manually in the **Actions** tab.
-
-Your site will be available at:
-```
-https://YOUR_USERNAME.github.io/cyberpunk-smart-city/
-```
-
----
-
-## 🎙️ 2-Minute Exhibition Demo Script
-
-> _For use at school exhibitions and open days_
-
----
-
-**[START — 0:00]**
-"Welcome to Cyberpunk Smart City! I'm going to show you what it's like to be the Cyber Defense Commander of a fictional smart city that's under a simulated cyber attack."
-
-**[POINT TO MAP — 0:15]**
-"This is our city map. You can see 12 different systems — hospitals, traffic lights, power plants, and more. Each building glows a different colour depending on how secure it is. Green means safe, amber means warning, and red means it's been compromised."
-
-**[START SCENARIO 1 — 0:30]**
-"Let's start Scenario 1: a fictional phishing attack on the transit system."
-_[Click Scenario 1, then click Next Event]_
-"A staff member clicked a suspicious link. Now the Metro Control Center is showing a warning. See how the building changed colour?"
-
-**[CLICK METRO, THEN APPLY MFA — 0:50]**
-"I'll click the Metro Control Center to select it, then apply Multi-Factor Authentication — that's a second login check — to slow the simulated attacker down."
-_[Click metro_control, click Enable MFA in Defense Command]_
-"The health bar increased, and my score went up!"
-
-**[ADVANCE EVENT — 1:10]**
-_[Click Next Event]_
-"The attacker is now trying to spread to the traffic lights. I'll segment the network — like closing blast doors — to contain the spread."
-
-**[LEARNING DRAWER — 1:30]**
-"If you want to understand why MFA matters, click 'Learn Why' at the top. It explains every concept in plain English."
-
-**[MISSION REPORT — 1:45]**
-"At the end of every scenario, you get a Mission Report with a grade, score, and feedback on how well you defended the city."
-
-**[CLOSE — 2:00]**
-"All of this is a safe simulation — nothing connects to real systems. The goal is to learn how real cyber defenders think and make decisions. Have a go!"
-
----
-
-## 🔧 Troubleshooting
-
-### `npm install` fails
-- Ensure you have Node.js 18 or later: `node --version`
-- Clear npm cache: `npm cache clean --force`
-
-### `npm run dev` shows blank page
-- Check the browser console for errors (F12)
-- Ensure all files in `src/` are present
-- Try restarting the dev server
-
-### Tests fail with import errors
-- Ensure `vitest` is installed: `npm install`
-- Check that `vite.config.ts` includes the `test` block with `globals: true`
-
-### GitHub Pages shows 404
-- Confirm `VITE_BASE_PATH` in GitHub repository variables matches your repo name exactly (including leading and trailing `/`)
-- Ensure GitHub Pages source is set to **GitHub Actions** (not a branch)
-
-### Fonts don't load offline
-- The project uses Google Fonts via CDN. The layout still works offline using system fallback fonts, but Orbitron and Share Tech Mono require an internet connection to load.
-
----
-
-## 📁 File Structure
+<details>
+<summary><b>📁 Project structure</b></summary>
 
 ```
-cyberpunk-smart-city/
-├── .github/
-│   └── workflows/
-│       └── deploy-pages.yml      # GitHub Pages CI/CD
-├── public/
+CyberSiege/
 ├── src/
 │   ├── components/
-│   │   ├── AssetDetails.tsx       # Selected asset info panel
-│   │   ├── CityMap.tsx            # Interactive city map
-│   │   ├── DefensePanel.tsx       # Defense action controls
-│   │   ├── HardwareStatus.tsx     # Mock LED hardware dashboard
-│   │   ├── LearningDrawer.tsx     # Cybersecurity learning guide
-│   │   ├── MissionPanel.tsx       # Scenario playback + reports
-│   │   └── ThreatConsole.tsx      # Terminal event log
-│   ├── context/
-│   │   └── AppContext.tsx          # React Context + useReducer
-│   ├── data/
-│   │   ├── assets.ts              # 12 city assets data
-│   │   ├── defenses.ts            # 7 defense actions data
-│   │   └── scenarios.ts           # 3 playable scenarios
-│   ├── engine/
-│   │   ├── scoring.ts             # Score + grade calculation
-│   │   └── simulationEngine.ts    # Main reducer + helpers
-│   ├── hardware/
-│   │   ├── HardwareBridge.ts      # Interface definition
-│   │   ├── MockHardwareBridge.ts  # Default mock implementation
-│   │   └── SerialHardwareBridge.ts # Future ESP32 placeholder
-│   ├── styles/
-│   │   └── global.css             # Cyberpunk CSS design system
-│   ├── tests/
-│   │   ├── scoring.test.ts        # Scoring engine unit tests
-│   │   └── simulationEngine.test.ts # Reducer unit tests
-│   ├── types/
-│   │   └── city.ts                # TypeScript types
-│   ├── App.tsx                    # Main app shell
-│   └── main.tsx                   # Entry point
-├── CONTRIBUTING.md
-├── LICENSE                        # MIT
-├── README.md
-├── SECURITY.md
-├── index.html
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
+│   │   ├── landing/            # Hero, Navbar, MissionDock, WebGL glass scene
+│   │   ├── CityMap.tsx         # Interactive map of all 12 assets
+│   │   ├── ThreatConsole.tsx   # Live event-log terminal
+│   │   ├── MissionPanel.tsx    # Scenario playback + mission report
+│   │   ├── DefensePanel.tsx    # Defense actions
+│   │   ├── AssetDetails.tsx    # Selected asset intel
+│   │   ├── LearningDrawer.tsx  # "Learn Why" explainers
+│   │   ├── DashboardHeader.tsx # KPIs + sparklines
+│   │   └── HardwareStatus.tsx  # LED mirror panel
+│   ├── engine/                 # simulationEngine (reducer) + scoring
+│   ├── data/                   # assets, scenarios, defenses
+│   ├── hardware/               # HardwareBridge interface + Mock/Serial impls
+│   ├── context/                # React Context + useReducer
+│   ├── hooks/                  # useSoundFx, useCountUp, useNow, useCitySummary
+│   ├── types/  utils/  styles/
+│   └── tests/                  # Vitest suites
+├── docs/                       # Screenshots + banner
+└── .github/workflows/          # Lint → Test → Build → Deploy to Pages
 ```
 
+</details>
+
+| Layer | Tech |
+|---|---|
+| ⚡ Build | Vite 8 |
+| ⚛️ UI | React 19 + TypeScript 6 |
+| 🧠 State | `useReducer` + Context (pure, fully testable engine) |
+| ✨ 3D | three.js, code-split so it never blocks first paint |
+| 🔊 Audio | Web Audio API, synthesized with zero sound files |
+| 🧪 Tests | Vitest |
+| 🧹 Lint | oxlint |
+| 🎨 Styling | Vanilla CSS + custom properties |
+| 🚀 CI/CD | GitHub Actions → GitHub Pages |
+
 ---
 
-## 📜 License
+## 🔌 ESP32 Hardware Mode
 
-[MIT License](LICENSE) — free to use, modify, and distribute with attribution.
+Build a **physical model city** with an LED in every building, wire it to an ESP32, and watch real lights flip red as attacks land in the app.
+
+| Status | LED |
+|---|---|
+| 🟢 Secure | `#00ff88` |
+| 🟡 Warning | `#ffd600` |
+| 🔴 Compromised | `#ff2d78` |
+| ⚫ Offline | `#000000` |
+| 🟣 Recovering | `#a259ff` |
+
+```json
+{ "assetId": "metro_control", "status": "compromised", "health": 45 }
+```
+
+Ships with a `MockHardwareBridge` (on-screen LED panel) and a placeholder `SerialHardwareBridge` for Web Serial. See [`src/hardware/`](src/hardware/).
 
 ---
 
-_Built with ❤️ for cybersecurity education. Stay safe. Defend well._ 🛡️
+## 🚀 Deploy Your Own
+
+Already wired up. Each push to `main` runs **lint → tests → build → deploy**.
+
+1. Fork / push this repo to GitHub
+2. **Settings → Pages → Source → GitHub Actions**
+3. Push to `main` and you're live at `https://<you>.github.io/<repo-name>/`
+
+> [!NOTE]
+> The base path is set automatically from the repo name. To override it, set a `VITE_BASE_PATH` repository variable.
+
+---
+
+## 🎙️ 2-Minute Expo Demo Script
+
+<details>
+<summary><b>Click to expand. Perfect for science fairs & tech expos</b></summary>
+
+<br/>
+
+| ⏱️ | Do | Say |
+|---|---|---|
+| 0:00 | Landing page | *"This is CyberSiege. I'm the Cyber Defense Commander of this city."* |
+| 0:15 | Show the map | *"12 systems: hospitals, traffic lights, power plants. Green is safe, red is under attack."* |
+| 0:30 | Start Scenario 1 | *"A phishing attack just hit the metro. Watch it turn red."* |
+| 0:50 | Enable MFA | *"Two-factor authentication kicks the attacker out. Health up, score up."* |
+| 1:10 | Advance event | *"They're spreading to traffic lights, so I segment the network. Blast doors."* |
+| 1:30 | Open "Learn Why" | *"Every defense explains the real-world concept in plain English."* |
+| 1:45 | Mission report | *"At the end you get a grade. Can you get an A?"* |
+| 2:00 | Hand over | *"Everything is simulated. Nothing touches real systems. Want to try?"* |
+
+</details>
+
+---
+
+## 🤝 Contributing · 🔒 Security · 📜 License
+
+- Contributions welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md)
+- Safe-use statement & policy: [SECURITY.md](SECURITY.md)
+- [MIT](LICENSE): free to use, modify and share
+
+<p align="center">
+  <b>⭐ If CyberSiege kept your grid alive, drop a star. ⭐</b>
+</p>
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00e5ff,50:a259ff,100:ff2d78&height=120&section=footer&text=THE%20GRID%20NEVER%20SLEEPS&fontSize=22&fontColor=ffffff&fontAlignY=72" alt="footer" width="100%"/>
+</p>
+
+<p align="center">
+  <sub>Built with 🔥 for cybersecurity education by <a href="https://github.com/sarthakkandhare03">@sarthakkandhare03</a></sub>
+</p>

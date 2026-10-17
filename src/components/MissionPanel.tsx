@@ -152,14 +152,14 @@ export function MissionPanel() {
   // If we have a report, show it
   if (missionReport) {
     return (
-      <div className="panel mission-panel">
+      <section id="missions" className="panel mission-panel" aria-label="Mission Report">
         <div className="panel-header">
           <span className="panel-title">Mission Report</span>
         </div>
         <div className="panel-body">
           <MissionReport />
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -170,10 +170,9 @@ export function MissionPanel() {
     const progressPct = (currentIndex / totalEvents) * 100;
 
     return (
-      <div className="panel mission-panel active-scenario" role="region" aria-label={`Active Scenario: ${activeScenario.title}`}>
+      <section id="missions" className="panel mission-panel active-scenario" aria-label={`Active Scenario: ${activeScenario.title}`}>
         <div className="panel-header">
-          <span className="panel-title" style={{ color: 'var(--neon-magenta)' }}>
-            <span style={{ marginRight: '4px' }}>⚠</span>
+          <span className="panel-title panel-title--hostile">
             {activeScenario.title}
           </span>
           <span className={`scenario-card__difficulty difficulty-${activeScenario.difficulty}`}>
@@ -182,34 +181,21 @@ export function MissionPanel() {
         </div>
         <div className="panel-body">
           {/* Subtitle */}
-          <p className="active-scenario__story" style={{ marginBottom: 'var(--space-sm)', fontStyle: 'italic', color: 'var(--neon-magenta)', fontSize: '0.75rem' }}>
+          <p className="active-scenario__subtitle">
             {activeScenario.subtitle}
           </p>
 
           {/* Progress */}
-          <div style={{ marginBottom: 'var(--space-md)' }}>
+          <div className="scenario-progress">
             <div
-              style={{
-                height: '4px',
-                background: 'var(--bg-dark)',
-                borderRadius: '2px',
-                overflow: 'hidden',
-                marginBottom: '4px',
-              }}
+              className="scenario-progress__track"
               role="progressbar"
               aria-valuenow={currentIndex}
+              aria-valuemin={0}
               aria-valuemax={totalEvents}
               aria-label={`Scenario progress: event ${currentIndex} of ${totalEvents}`}
             >
-              <div
-                style={{
-                  height: '100%',
-                  width: `${progressPct}%`,
-                  background: 'linear-gradient(90deg, var(--neon-magenta), var(--neon-purple))',
-                  transition: 'width 0.5s ease',
-                  borderRadius: '2px',
-                }}
-              />
+              <div className="scenario-progress__fill" style={{ width: `${progressPct}%` }} />
             </div>
             <p className="event-progress">
               Event {currentIndex} of {totalEvents}
@@ -218,7 +204,7 @@ export function MissionPanel() {
 
           {/* Current event */}
           {currentEvent ? (
-            <div className="event-card" aria-live="polite">
+            <div className="event-card" aria-live="polite" key={currentEvent.id}>
               <div className="event-card__title">{currentEvent.title}</div>
               <div className="event-card__narrative">{currentEvent.narrative}</div>
               <div className="event-card__teaching">
@@ -227,46 +213,18 @@ export function MissionPanel() {
               </div>
             </div>
           ) : (
-            <div
-              style={{
-                background: 'rgba(0,229,255,0.06)',
-                border: '1px solid rgba(0,229,255,0.2)',
-                borderRadius: 'var(--radius-md)',
-                padding: 'var(--space-md)',
-                marginBottom: 'var(--space-md)',
-                color: 'var(--text-secondary)',
-                fontSize: '0.8rem',
-                lineHeight: '1.7',
-              }}
-            >
-              <strong style={{ color: 'var(--neon-cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', display: 'block', marginBottom: '6px' }}>
-                🚨 SCENARIO BRIEF
-              </strong>
+            <div className="scenario-brief">
+              <strong className="scenario-brief__label">Scenario brief</strong>
               {activeScenario.story}
             </div>
           )}
 
           {/* Teaches section */}
-          <div style={{ marginBottom: 'var(--space-md)' }}>
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.6rem',
-                color: 'var(--text-muted)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                marginBottom: '4px',
-              }}
-            >
-              This scenario teaches:
-            </div>
+          <div className="teaches">
+            <div className="micro-label">This scenario teaches</div>
             <div className="dependencies-list">
               {activeScenario.teaches.map((t, i) => (
-                <span
-                  key={i}
-                  className="dependency-tag"
-                  style={{ color: 'var(--neon-purple)', borderColor: 'rgba(162,89,255,0.3)' }}
-                >
+                <span key={i} className="dependency-tag dependency-tag--learn">
                   {t}
                 </span>
               ))}
@@ -276,7 +234,7 @@ export function MissionPanel() {
           {/* Controls */}
           <div className="scenario-controls">
             <button
-              className="btn btn-solid-magenta btn-lg"
+              className="btn btn-solid-cyan btn-lg"
               onClick={handleNextEvent}
               disabled={simulation.isAutoPlaying}
               aria-label="Advance to next event"
@@ -301,26 +259,18 @@ export function MissionPanel() {
             </button>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 
   // Scenario selection view
   return (
-    <div className="panel mission-panel" role="region" aria-label="Mission Command Center">
+    <section id="missions" className="panel mission-panel" aria-label="Mission Command Center">
       <div className="panel-header">
         <span className="panel-title">Mission Command</span>
       </div>
       <div className="panel-body">
-        <p
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.7rem',
-            color: 'var(--text-muted)',
-            marginBottom: 'var(--space-md)',
-            lineHeight: '1.6',
-          }}
-        >
+        <p className="panel-intro">
           Select an incident scenario to begin your mission as Cyber Defense Commander.
           Each scenario is a safe educational simulation — no real systems are affected.
         </p>
@@ -336,25 +286,18 @@ export function MissionPanel() {
             <div className="scenario-card__number">SCENARIO {idx + 1}</div>
             <div className="scenario-card__title">{scenario.title}</div>
             <div className="scenario-card__subtitle">{scenario.subtitle}</div>
-            <div
-              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-            >
+            <div className="scenario-card__footer">
               <span className={`scenario-card__difficulty difficulty-${scenario.difficulty}`}>
                 {scenario.difficulty}
               </span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.6rem',
-                  color: 'var(--text-muted)',
-                }}
-              >
+              <span className="scenario-card__meta">
                 {scenario.events.length} events · {scenario.affectedAssetIds.length} assets
               </span>
             </div>
+            <span className="scenario-card__arrow" aria-hidden="true">→</span>
           </button>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

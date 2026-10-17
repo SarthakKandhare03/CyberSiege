@@ -34,16 +34,7 @@ function HealthBar({ health, status }: { health: number; status: string }) {
           style={{ width: `${health}%` }}
         />
       </div>
-      <div
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.6rem',
-          color: 'var(--text-muted)',
-          marginTop: '3px',
-        }}
-      >
-        STATUS: {status.toUpperCase()}
-      </div>
+      <div className="health-bar-status">Status: {status}</div>
     </div>
   );
 }
@@ -54,7 +45,7 @@ export function AssetDetails() {
 
   if (!asset) {
     return (
-      <div className="panel asset-details" role="region" aria-label="Asset Details">
+      <section className="panel asset-details" aria-label="Asset Details">
         <div className="panel-header">
           <span className="panel-title">Asset Inspector</span>
         </div>
@@ -62,7 +53,7 @@ export function AssetDetails() {
           <div className="asset-details__empty-icon" aria-hidden="true">🏙️</div>
           <p>Click a building on<br />the city map to inspect it</p>
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -71,7 +62,7 @@ export function AssetDetails() {
   const deps = asset.dependencies.map((id) => state.assets[id]?.name || id);
 
   return (
-    <div className="panel asset-details" role="region" aria-label={`Asset Details: ${asset.name}`}>
+    <section className="panel asset-details" aria-label={`Asset Details: ${asset.name}`}>
       <div className="panel-header">
         <span className="panel-title">Asset Inspector</span>
         <span
@@ -147,26 +138,11 @@ export function AssetDetails() {
 
         {/* Active defenses tags */}
         {asset.activeDefenses.length > 0 && (
-          <div style={{ marginBottom: 'var(--space-sm)' }}>
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.6rem',
-                color: 'var(--text-muted)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                marginBottom: '4px',
-              }}
-            >
-              Active Defenses
-            </div>
+          <div className="active-defenses">
+            <div className="micro-label">Active Defenses</div>
             <div className="dependencies-list">
               {asset.activeDefenses.map((d) => (
-                <span
-                  key={d}
-                  className="dependency-tag"
-                  style={{ color: 'var(--status-secure)', borderColor: 'rgba(0,255,136,0.3)' }}
-                >
+                <span key={d} className="dependency-tag dependency-tag--ok">
                   ✓ {d.replace(/_/g, ' ')}
                 </span>
               ))}
@@ -184,6 +160,6 @@ export function AssetDetails() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

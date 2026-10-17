@@ -190,8 +190,8 @@ export const DISTRICT_NAMES: Record<string, string> = {
 };
 
 export const DISTRICT_COLORS: Record<string, string> = {
-  transit: '#00e5ff',
-  health: '#ff2d78',
-  energy: '#ffd600',
-  civic: '#a259ff',
+  transit: '#4fd8f0',
+  health: '#ff5c8a',
+  energy: '#ffb547',
+  civic: '#9d7bff',
 };
